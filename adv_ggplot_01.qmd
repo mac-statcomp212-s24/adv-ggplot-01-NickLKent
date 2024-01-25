@@ -53,8 +53,6 @@ library(dplyr)
 weather <- read_csv("https://lmyint.github.io/212_spring_2024/data/sfo_weather.csv")
 ```
 
-
-
 # Visualization
 
 ```{r}
@@ -65,19 +63,28 @@ month_starts <- weather %>%
   filter(Day == 1, Month != 1)
 
 month_ends <- weather %>% 
-  filter(day == 30)
+  filter(Day == 30)
 
-weather_w_monts <- weather %>% 
+month_ends_feb <- weather %>% 
+  filter(Day == 28) %>% 
+  filter(Month == 2)
+
+weather_w_months <- weather %>% 
   mutate(month_name = month.abb[Month])
+
+xmarks <- weather %>% 
+  group_by(Month) %>% 
+  filter(Day == 15)
 ```
 
 ```{r}
-ggplot(weather) +
+ggplot(weather_w_months) +
     geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = "#ecebe3", linewidth = 1.5) +
     geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA", linewidth = 1.5) +
     geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = "#A90248", linewidth = 1.5) +
     geom_vline(data = month_starts, aes(xintercept = dateInYear), lty = "dashed", color = "#b2b2b2", linewidth = 0.3)+
-    theme_classic()
+    theme_classic()+
+    scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
 ```
 
 ```{r}
@@ -85,12 +92,9 @@ weather %>%
   ggplot(aes(x = dateInYear, y = CulmPrec))+
   geom_area(color = "#32a3d8", fill = "#ebeae2", linewidth = 0.2)+
   geom_text(data = month_ends, aes(x = dateInYear, y = CulmPrec, label = CulmPrec), size = 3)+
+  geom_text(data = month_ends_feb, aes(x = dateInYear, y = CulmPrec, label = CulmPrec), size = 3)+
   theme_classic()
 ```
-
-
-
-
 
 # AI usage
 
