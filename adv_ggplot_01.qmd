@@ -90,6 +90,7 @@ record_precips <- weather %>%
 ```
 
 ```{r}
+# Temperature Plot
 plot1 <- ggplot(weather_w_months) +
     geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = "#ecebe3", linewidth = 1.5) +
     geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA", linewidth = 1.5) +
@@ -108,6 +109,7 @@ plot1 <- ggplot(weather_w_months) +
 ```
 
 ```{r}
+# Precipitation Plot
 plot2 <- weather %>% 
   ggplot(aes(x = dateInYear, y = CulmPrec))+
   geom_area(color = "#32a3d8", fill = "#ebeae2", linewidth = 0.2)+
