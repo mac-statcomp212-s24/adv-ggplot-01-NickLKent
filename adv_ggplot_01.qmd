@@ -101,10 +101,9 @@ plot1 <- ggplot(weather_w_months) +
     geom_vline(data = month_starts, aes(xintercept = dateInYear), lty = "dashed", color = "#b2b2b2", linewidth = 0.3)+
     theme_classic()+
     theme(axis.title.x = element_blank(),
-    axis.text.x = element_blank(),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank())+
-    scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))+
+    scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"), expand=c(0,1))+
     labs(x = "", y = "")
 ```
 
@@ -116,17 +115,18 @@ plot2 <- weather %>%
   geom_text(data = month_ends, aes(x = dateInYear-5, y = CulmPrec+0.5, label = CulmPrec), size = 3)+
   geom_text(data = month_ends_feb, aes(x = dateInYear-5, y = CulmPrec+0.5, label = CulmPrec), size = 3)+
   geom_point(data = record_precips, aes(x = dateInYear, y = CulmPrec+0.2), shape = 25, fill = "black")+
-  geom_vline(data = month_starts, aes(xintercept = dateInYear), color = "#b2b2b2", linewidth = 0.3)+
+  geom_vline(data = month_starts, aes(xintercept = dateInYear), color = "#ebeae2", linewidth = 0.3)+
   theme_classic()+
   theme(axis.title.x = element_blank(),
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank(),
     axis.line.x = element_blank())+
-  labs(x = "", y = "")
+  labs(x = "", y = "")+
+  scale_x_continuous(expand = c(0,1))
 ```
 
 ```{r}
-plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, rel_heights = c(2,1), align = "v", label_size = 10)
+plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, rel_heights = c(2,1), align = "v", label_size = 10, hjust = -0.7)
 ```
 
 
