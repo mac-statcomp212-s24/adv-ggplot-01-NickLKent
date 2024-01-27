@@ -50,6 +50,7 @@ library(readr)
 library(tidyr)
 library(tidyverse)
 library(dplyr)
+library(cowplot) 
 weather <- read_csv("https://lmyint.github.io/212_spring_2024/data/sfo_weather.csv")
 ```
 
@@ -75,26 +76,57 @@ weather_w_months <- weather %>%
 xmarks <- weather %>% 
   group_by(Month) %>% 
   filter(Day == 15)
+
+record_highs <- weather %>% 
+  filter(High == RecordHigh) %>% 
+  filter(RecordHigh != 73)
+
+special_record_high <- weather %>% 
+  filter(RecordHigh == 73)
+
+record_precips <- weather %>% 
+  filter(Precip == RecordPrecip) %>% 
+  filter(Precip != 0)
 ```
 
 ```{r}
-ggplot(weather_w_months) +
+plot1 <- ggplot(weather_w_months) +
     geom_linerange(aes(x = dateInYear, ymin = RecordLow, ymax = RecordHigh), color = "#ecebe3", linewidth = 1.5) +
     geom_linerange(aes(x = dateInYear, ymin = NormalLow, ymax = NormalHigh), color = "#C8B8BA", linewidth = 1.5) +
     geom_linerange(aes(x = dateInYear, ymin = Low, ymax = High), color = "#A90248", linewidth = 1.5) +
+    geom_point(data = record_highs, aes(x = dateInYear, y = High+0.8), shape = 25, fill = "black")+
+    geom_text(data = record_highs, aes(x = dateInYear, y = High+5.5, label = RecordText), size = 2)+
+    geom_text(data = special_record_high, aes(x = dateInYear, y = High+11, label = RecordText), size = 2)+
     geom_vline(data = month_starts, aes(xintercept = dateInYear), lty = "dashed", color = "#b2b2b2", linewidth = 0.3)+
     theme_classic()+
-    scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))
+    theme(axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank())+
+    scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"))+
+    labs(x = "", y = "")
 ```
 
 ```{r}
-weather %>% 
+plot2 <- weather %>% 
   ggplot(aes(x = dateInYear, y = CulmPrec))+
   geom_area(color = "#32a3d8", fill = "#ebeae2", linewidth = 0.2)+
-  geom_text(data = month_ends, aes(x = dateInYear, y = CulmPrec, label = CulmPrec), size = 3)+
-  geom_text(data = month_ends_feb, aes(x = dateInYear, y = CulmPrec, label = CulmPrec), size = 3)+
-  theme_classic()
+  geom_text(data = month_ends, aes(x = dateInYear-5, y = CulmPrec+0.5, label = CulmPrec), size = 3)+
+  geom_text(data = month_ends_feb, aes(x = dateInYear-5, y = CulmPrec+0.5, label = CulmPrec), size = 3)+
+  geom_point(data = record_precips, aes(x = dateInYear, y = CulmPrec+0.2), shape = 25, fill = "black")+
+  geom_vline(data = month_starts, aes(xintercept = dateInYear), color = "#b2b2b2", linewidth = 0.3)+
+  theme_classic()+
+  theme(axis.title.x = element_blank(),
+    axis.text.x = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.line.x = element_blank())+
+  labs(x = "", y = "")
 ```
+
+```{r}
+plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, rel_heights = c(2,1), align = "v", label_size = 10)
+```
+
 
 # AI usage
 
