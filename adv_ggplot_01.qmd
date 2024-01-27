@@ -99,10 +99,12 @@ plot1 <- ggplot(weather_w_months) +
     geom_text(data = record_highs, aes(x = dateInYear, y = High+5.5, label = RecordText), size = 2)+
     geom_text(data = special_record_high, aes(x = dateInYear, y = High+11, label = RecordText), size = 2)+
     geom_vline(data = month_starts, aes(xintercept = dateInYear), lty = "dashed", color = "#b2b2b2", linewidth = 0.3)+
+    ggtitle("SFO Weather in 2011")+
     theme_classic()+
     theme(axis.title.x = element_blank(),
     axis.ticks.x = element_blank(),
-    axis.line.x = element_blank())+
+    axis.line.x = element_blank(),
+    plot.title = element_text(hjust=0.5))+
     scale_x_continuous(breaks = xmarks$dateInYear, labels = c("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"), expand=c(0,1))+
     labs(x = "", y = "")
 ```
@@ -126,7 +128,7 @@ plot2 <- weather %>%
 ```
 
 ```{r}
-plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, rel_heights = c(2,1), align = "v", label_size = 10, hjust = -0.7)
+plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, rel_heights = c(3,1), align = "v", label_size = 10, hjust = -0.7)
 ```
 
 
