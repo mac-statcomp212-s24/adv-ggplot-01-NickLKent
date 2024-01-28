@@ -140,10 +140,10 @@ plot_grid(plot1, plot2, labels = c('Temperature', 'Precipitation'), ncol = 1, re
 
 If you use an AI tool (e.g., ChatGPT, Google Bard) to help with this assignment, please paste below the prompts you use and their associated output.
 
-**Prompt:**
+**Prompt:** I did not use AI for this assignment, but I did use some help from online resources such as Stack Overflow, ggplot2 reference page, etc. 
 
 **Output:**
 
 Keep in mind that the use of AI has a [huge energy cost](https://lmyint.github.io/212_spring_2024/syllabus.html#artificial-intelligence-ai-use). Please describe an energy-saving activity that you can start engaging in to offset this cost.
 
-**Energy-saving activity:** 
+**Energy-saving activity:** Turning off the lights in the rooms that im not currently in. Also, using more efficient transportation(buses, walking, etc.)
