@@ -5,6 +5,7 @@ format: html
 editor: visual
 ---
 
+# Loading Packages and Data
 ```{r}
 # packages
 library(readr)
@@ -15,19 +16,44 @@ library(ggplot2)
 english_education <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-01-23/english_education.csv')
 ```
 
+# Variables of Interest
 ```{r}
 # Input variables: population, size, coastal, university, job density
 # Outcome: level4qual_residents35_64_2011, activity_at_age_19_employment_with_earnings_above_0, activity_at_age_19_employment_with_earnings_above_10_000, education_score
 ```
+I took a look at the code book online in Github and a lot of the education variables were sort of confusing to me, so instead I am going to focus on other variables that I feel more confident in interpreting. 
 
+# Visualizations
 ```{r}
 #What kinds of things impact the size of a town?
 
 english_education %>% 
   group_by(coastal) %>% 
   summarise(pop = mean(population_2011)) %>% 
-  ggplot(aes(x = coastal, y = pop))+
-  geom_col(color = "darkblue", fill = "lightblue")+
+  filter(!is.na(coastal)) %>% 
+  ggplot(aes(x = coastal, y = pop/1000))+
+  geom_col(color = "darkblue", fill = "lightblue", alpha = 0.5)+
   theme_classic()+
-  labs(x = "Is the Town on a Coast?", y = "Average Population", title = "Population VS Coastal/Non-Coastal")
+  labs(x = "Is the Town on a Coast?", y = "Average Population(In Thousands of People)", title = "Population of Towns On/Off the Coast")
+
+english_education %>% 
+  group_by(university_flag) %>% 
+  summarise(pop = mean(population_2011)) %>% 
+  filter(!is.na(university_flag)) %>% 
+  ggplot(aes(x = university_flag, y = pop/1000))+
+  geom_col(color = "darkgreen", fill = "lightgreen", alpha = 0.5)+
+  theme_classic()+
+  labs(x = "Does the Town Contain a University?", y = "Average Population(In Thousands of People)", title = "Population of Towns With/Without University")
+
+english_education %>% 
+  group_by(job_density_flag) %>% 
+  summarise(pop = mean(population_2011)) %>% 
+  filter(!is.na(job_density_flag)) %>% 
+  ggplot(aes(x = job_density_flag, y = pop/1000))+
+  geom_col(color = "purple", fill = "lavender", alpha = 0.5)+
+  theme_classic()+
+  labs(x = "Type of Town", y = "Average Population(In Thousands of People)", title = "Population of Towns Based on Type")
 ```
+
+# Conclusions
+So a quick conclusion about a few things that I learned while making these plots. Populations in towns that are not on the coast are larger. One reason for this could be because cities are less likely to be damaged by hurricanes, tsunamis, etc, therefore they can build and expand because they dont need to worry about things being damaged. Next when we look at the average population size when you look at towns with or without a university you can see that towns with a university have much larger populations. One thing that could explain this is because towns with universities could attract more residents. Also, Id be curious to know if these towns include the population of the school in their total population. Lastly, we find that towns that are considered "working" have the largest populations compared to "mixed" or "residential". This could be because towns that are "working" most likely have more businesses and job opportunities so people will live in those cities. 
