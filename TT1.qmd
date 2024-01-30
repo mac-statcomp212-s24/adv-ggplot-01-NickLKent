@@ -1,0 +1,33 @@
+---
+title: "Tidy Tuesday"
+author: "Nick Kent"
+format: html
+editor: visual
+---
+
+```{r}
+# packages
+library(readr)
+library(tidyr)
+library(tidyverse)
+library(ggplot2)
+#read in the data
+english_education <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2024/2024-01-23/english_education.csv')
+```
+
+```{r}
+# Input variables: population, size, coastal, university, job density
+# Outcome: level4qual_residents35_64_2011, activity_at_age_19_employment_with_earnings_above_0, activity_at_age_19_employment_with_earnings_above_10_000, education_score
+```
+
+```{r}
+#What kinds of things impact the size of a town?
+
+english_education %>% 
+  group_by(coastal) %>% 
+  summarise(pop = mean(population_2011)) %>% 
+  ggplot(aes(x = coastal, y = pop))+
+  geom_col(color = "darkblue", fill = "lightblue")+
+  theme_classic()+
+  labs(x = "Is the Town on a Coast?", y = "Average Population", title = "Population VS Coastal/Non-Coastal")
+```
